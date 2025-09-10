@@ -4,18 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.example.myapplication.Referee
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,69 +20,76 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 val referee = Referee()
+                val computer = remember { Computer() }
 
-                // Stav pro výsledek
+                // spuštění počítače po načtení obrazovky
+                LaunchedEffect(Unit) {
+                    computer.startMoving()
+                }
+
+                // tah počítače jako State
+                val computerMove by computer.move.collectAsState()
+
                 var result by remember { mutableStateOf("") }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        // Tlačítka pro tahy
-                        Button(
-                            onClick = {
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Computer is choosing: $computerMove")
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // tlačítka pro hráče
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Button(onClick = {
                                 val playerMove = referee.stringToMove("rock")
-                                val computerMove = Referee.Move.values().random()
                                 result = referee.displayResult(playerMove, computerMove)
+                            }) {
+                                Text("ROCK")
                             }
-                        ) {
-                            Text(text = "ROCK")
-                        }
 
-                        Button(
-                            onClick = {
+                            Button(onClick = {
                                 val playerMove = referee.stringToMove("paper")
-                                val computerMove = Referee.Move.values().random()
                                 result = referee.displayResult(playerMove, computerMove)
+                            }) {
+                                Text("PAPER")
                             }
-                        ) {
-                            Text(text = "PAPER")
-                        }
 
-                        Button(
-                            onClick = {
+                            Button(onClick = {
                                 val playerMove = referee.stringToMove("scissors")
-                                val computerMove = Referee.Move.values().random()
                                 result = referee.displayResult(playerMove, computerMove)
+                            }) {
+                                Text("SCISSORS")
                             }
-                        ) {
-                            Text(text = "SCISSORS")
                         }
 
-                        Button(
-                            onClick = {
-                                val playerMove = referee.stringToMove("lizard")
-                                val computerMove = Referee.Move.values().random()
-                                result = referee.displayResult(playerMove, computerMove)
-                            }
-                        ) {
-                            Text(text = "LIZARD")
-                        }
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                        Button(
-                            onClick = {
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Button(onClick = {
                                 val playerMove = referee.stringToMove("spock")
-                                val computerMove = Referee.Move.values().random()
                                 result = referee.displayResult(playerMove, computerMove)
+                            }) {
+                                Text("SPOCK")
                             }
-                        ) {
-                            Text(text = "SPOCK")
+
+                            Button(onClick = {
+                                val playerMove = referee.stringToMove("lizard")
+                                result = referee.displayResult(playerMove, computerMove)
+                            }) {
+                                Text("LIZARD")
+                            }
                         }
 
-                        // Výpis výsledku
+                        Spacer(modifier = Modifier.height(24.dp))
+
                         if (result.isNotEmpty()) {
-                            Text(
-                                text = result,
-                                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                            )
+                            Text(text = result)
                         }
                     }
                 }

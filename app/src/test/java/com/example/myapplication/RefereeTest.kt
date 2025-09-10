@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.theme
+package com.example.myapplication
 
 import com.example.myapplication.Referee
 import org.junit.Assert.*
