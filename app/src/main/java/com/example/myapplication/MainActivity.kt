@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = "Computer is choosing: $computerMove")
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Computer is choosing:")
+                            MoveImage(move = computerMove)
+                        }
 
                         Spacer(modifier = Modifier.height(24.dp))
 
@@ -118,3 +121,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@Composable
+fun MoveImage(move: Referee.Move, modifier: Modifier = Modifier) {
+    val resId = when (move) {
+        Referee.Move.ROCK -> R.drawable.rock
+        Referee.Move.PAPER -> R.drawable.paper
+        Referee.Move.SCISSORS -> R.drawable.scissors
+        Referee.Move.SPOCK -> R.drawable.spock
+        Referee.Move.LIZARD -> R.drawable.lizard
+    }
+
+    Image(
+        painter = painterResource(id = resId),
+        contentDescription = move.name,
+        modifier = modifier.size(96.dp)
+    )
+}
+
