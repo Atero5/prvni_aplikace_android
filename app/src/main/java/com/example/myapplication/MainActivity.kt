@@ -51,65 +51,43 @@ class MainActivity : ComponentActivity() {
 
                         // tlačítka pro hráče
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("rock")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.rock),
-                                    contentDescription = "Rock",
-                                    modifier = Modifier.size(64.dp)
-                                )
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("paper")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.paper),
-                                    contentDescription = "Paper",
-                                    modifier = Modifier.size(64.dp)
-                                )
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("scissors")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.scissors),
-                                    contentDescription = "Scissors",
-                                    modifier = Modifier.size(64.dp)
-                                )
-                            }
+                            MoveButton(
+                                move = Referee.Move.ROCK,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.PAPER,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.SCISSORS,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("spock")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.spock),
-                                    contentDescription = "Spock",
-                                    modifier = Modifier.size(64.dp)
-                                )
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("lizard")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.lizard),
-                                    contentDescription = "Lizard",
-                                    modifier = Modifier.size(64.dp)
-                                )
-                            }
+                            MoveButton(
+                                move = Referee.Move.SPOCK,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.LIZARD,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
                         }
+
                         Spacer(modifier = Modifier.height(24.dp))
 
                         if (result.isNotEmpty()) {
@@ -137,4 +115,28 @@ fun MoveImage(move: Referee.Move, modifier: Modifier = Modifier) {
         modifier = modifier.size(96.dp)
     )
 }
+
+@Composable
+fun MoveButton(
+    move: Referee.Move,
+    onClick: (Referee.Move) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val resId = when (move) {
+        Referee.Move.ROCK -> R.drawable.rock
+        Referee.Move.PAPER -> R.drawable.paper
+        Referee.Move.SCISSORS -> R.drawable.scissors
+        Referee.Move.SPOCK -> R.drawable.spock
+        Referee.Move.LIZARD -> R.drawable.lizard
+    }
+
+    Button(onClick = { onClick(move) }) {
+        Image(
+            painter = painterResource(id = resId),
+            contentDescription = move.name,
+            modifier = modifier.size(64.dp)
+        )
+    }
+}
+
 
