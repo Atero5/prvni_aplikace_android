@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -40,7 +42,10 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = "Computer is choosing: $computerMove")
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Computer is choosing:")
+                            MoveImage(move = computerMove)
+                        }
 
                         Spacer(modifier = Modifier.height(24.dp))
 
@@ -50,21 +55,33 @@ class MainActivity : ComponentActivity() {
                                 val playerMove = referee.stringToMove("rock")
                                 result = referee.displayResult(playerMove, computerMove)
                             }) {
-                                Text("ROCK")
+                                Image(
+                                    painter = painterResource(id = R.drawable.rock),
+                                    contentDescription = "Rock",
+                                    modifier = Modifier.size(64.dp)
+                                )
                             }
 
                             Button(onClick = {
                                 val playerMove = referee.stringToMove("paper")
                                 result = referee.displayResult(playerMove, computerMove)
                             }) {
-                                Text("PAPER")
+                                Image(
+                                    painter = painterResource(id = R.drawable.paper),
+                                    contentDescription = "Paper",
+                                    modifier = Modifier.size(64.dp)
+                                )
                             }
 
                             Button(onClick = {
                                 val playerMove = referee.stringToMove("scissors")
                                 result = referee.displayResult(playerMove, computerMove)
                             }) {
-                                Text("SCISSORS")
+                                Image(
+                                    painter = painterResource(id = R.drawable.scissors),
+                                    contentDescription = "Scissors",
+                                    modifier = Modifier.size(64.dp)
+                                )
                             }
                         }
 
@@ -75,17 +92,24 @@ class MainActivity : ComponentActivity() {
                                 val playerMove = referee.stringToMove("spock")
                                 result = referee.displayResult(playerMove, computerMove)
                             }) {
-                                Text("SPOCK")
+                                Image(
+                                    painter = painterResource(id = R.drawable.spock),
+                                    contentDescription = "Spock",
+                                    modifier = Modifier.size(64.dp)
+                                )
                             }
 
                             Button(onClick = {
                                 val playerMove = referee.stringToMove("lizard")
                                 result = referee.displayResult(playerMove, computerMove)
                             }) {
-                                Text("LIZARD")
+                                Image(
+                                    painter = painterResource(id = R.drawable.lizard),
+                                    contentDescription = "Lizard",
+                                    modifier = Modifier.size(64.dp)
+                                )
                             }
                         }
-
                         Spacer(modifier = Modifier.height(24.dp))
 
                         if (result.isNotEmpty()) {
@@ -97,3 +121,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@Composable
+fun MoveImage(move: Referee.Move, modifier: Modifier = Modifier) {
+    val resId = when (move) {
+        Referee.Move.ROCK -> R.drawable.rock
+        Referee.Move.PAPER -> R.drawable.paper
+        Referee.Move.SCISSORS -> R.drawable.scissors
+        Referee.Move.SPOCK -> R.drawable.spock
+        Referee.Move.LIZARD -> R.drawable.lizard
+    }
+
+    Image(
+        painter = painterResource(id = resId),
+        contentDescription = move.name,
+        modifier = modifier.size(96.dp)
+    )
+}
+
