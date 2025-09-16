@@ -52,3 +52,4 @@ class RefereeTest {
         assertEquals(COMPUTER_WINS, referee.determineWinner(Referee.Move.ROCK, Referee.Move.SPOCK))
     }
 }
+

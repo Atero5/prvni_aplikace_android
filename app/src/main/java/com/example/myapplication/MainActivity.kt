@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -40,50 +42,50 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = "Computer is choosing: $computerMove")
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Computer is choosing:")
+                            MoveImage(move = computerMove)
+                        }
 
                         Spacer(modifier = Modifier.height(24.dp))
 
                         // tlačítka pro hráče
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("rock")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Text("ROCK")
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("paper")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Text("PAPER")
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("scissors")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Text("SCISSORS")
-                            }
+                            MoveButton(
+                                move = Referee.Move.ROCK,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.PAPER,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.SCISSORS,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("spock")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Text("SPOCK")
-                            }
-
-                            Button(onClick = {
-                                val playerMove = referee.stringToMove("lizard")
-                                result = referee.displayResult(playerMove, computerMove)
-                            }) {
-                                Text("LIZARD")
-                            }
+                            MoveButton(
+                                move = Referee.Move.SPOCK,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
+                            MoveButton(
+                                move = Referee.Move.LIZARD,
+                                onClick = { playerMove ->
+                                    result = referee.displayResult(playerMove, computerMove)
+                                }
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
@@ -97,3 +99,44 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@Composable
+fun MoveImage(move: Referee.Move, modifier: Modifier = Modifier) {
+    val resId = when (move) {
+        Referee.Move.ROCK -> R.drawable.rock
+        Referee.Move.PAPER -> R.drawable.paper
+        Referee.Move.SCISSORS -> R.drawable.scissors
+        Referee.Move.SPOCK -> R.drawable.spock
+        Referee.Move.LIZARD -> R.drawable.lizard
+    }
+
+    Image(
+        painter = painterResource(id = resId),
+        contentDescription = move.name,
+        modifier = modifier.size(96.dp)
+    )
+}
+
+@Composable
+fun MoveButton(
+    move: Referee.Move,
+    onClick: (Referee.Move) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val resId = when (move) {
+        Referee.Move.ROCK -> R.drawable.rock
+        Referee.Move.PAPER -> R.drawable.paper
+        Referee.Move.SCISSORS -> R.drawable.scissors
+        Referee.Move.SPOCK -> R.drawable.spock
+        Referee.Move.LIZARD -> R.drawable.lizard
+    }
+
+    Button(onClick = { onClick(move) }) {
+        Image(
+            painter = painterResource(id = resId),
+            contentDescription = move.name,
+            modifier = modifier.size(64.dp)
+        )
+    }
+}
+
+
